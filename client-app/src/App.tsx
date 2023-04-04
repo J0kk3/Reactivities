@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Header, List } from "semantic-ui-react";
+import { Header, List } from "semantic-ui-react";
 import axios from "axios";
 //styles
 import "./App.css";

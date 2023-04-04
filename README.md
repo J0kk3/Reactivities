@@ -1,5 +1,5 @@
-# Reactivities
-created using the following in powershell:</br>
+# Created using the following in powershell:</br>
+
 Write-Host "About to Create the directory" -ForegroundColor Green
 
 mkdir Reactivities

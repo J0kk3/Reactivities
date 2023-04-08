@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Header, List } from "semantic-ui-react";
 import axios from "axios";
-//styles
-import "./App.css";
 
 function App ()
 {

@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import App from "./app/layout/app";
+import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
 //styles
 import "semantic-ui-css/semantic.min.css";

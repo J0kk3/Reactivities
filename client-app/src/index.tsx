@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom/client";
-import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./app/router/Routes";
 //hooks
 import { StoreContext, store } from "./app/stores/store";
 //styles
@@ -12,7 +13,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StoreContext.Provider value={ store }>
-    <App />
+    <RouterProvider router={ router } />
   </StoreContext.Provider>
 );
 

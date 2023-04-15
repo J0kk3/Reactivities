@@ -1,6 +1,8 @@
 import ReactDOM from "react-dom/client";
 import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
+//hooks
+import { StoreContext, store } from "./app/stores/store";
 //styles
 import "semantic-ui-css/semantic.min.css";
 import "./app/layout/styles.css";
@@ -9,7 +11,9 @@ const root = ReactDOM.createRoot(
   document.getElementById( "root" ) as HTMLElement
 );
 root.render(
-  <App />
+  <StoreContext.Provider value={ store }>
+    <App />
+  </StoreContext.Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

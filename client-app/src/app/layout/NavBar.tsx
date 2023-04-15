@@ -1,12 +1,11 @@
 import { Menu, Container, Button } from "semantic-ui-react";
+//hooks
+import { useStore } from "../stores/store";
 
-interface Props
+const NavBar = () =>
 {
-    openForm: () => void;
-}
+    const { activityStore } = useStore();
 
-const NavBar = ( { openForm }: Props ) =>
-{
     return (
         <Menu inverted fixed="top">
             <Container>
@@ -16,7 +15,7 @@ const NavBar = ( { openForm }: Props ) =>
                 </Menu.Item>
                 <Menu.Item name="Activities" />
                 <Menu.Item>
-                    <Button onClick={ openForm } positive content="Create Activity" />
+                    <Button onClick={ () => activityStore.openForm() } positive content="Create Activity" />
                 </Menu.Item>
             </Container>
         </Menu>

@@ -5,6 +5,7 @@ import { router } from "./app/router/Routes";
 //hooks
 import { StoreContext, store } from "./app/stores/store";
 //styles
+import "react-calendar/dist/Calendar.css";
 import "semantic-ui-css/semantic.min.css";
 import "./app/layout/styles.css";
 

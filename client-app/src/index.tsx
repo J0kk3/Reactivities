@@ -6,6 +6,7 @@ import { router } from "./app/router/Routes";
 import { StoreContext, store } from "./app/stores/store";
 //styles
 import "react-calendar/dist/Calendar.css";
+import "react-toastify/dist/ReactToastify.min.css";
 import "semantic-ui-css/semantic.min.css";
 import "./app/layout/styles.css";
 

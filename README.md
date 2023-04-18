@@ -32,3 +32,10 @@ Write-Host "Executing dotnet restore" -ForegroundColor Green
 dotnet restore
 
 Write-Host "Finished!" -ForegroundColor Green
+<hr/>
+#To run:
+cd into API then run this command:
+
+```
+dotnet watch --no-hot-reload
+```

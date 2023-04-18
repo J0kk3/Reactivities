@@ -90,7 +90,8 @@ const ActivityForm = () =>
                             name="date"
                             showTimeSelect
                             timeCaption="time"
-                            dateFormat="MMMM d, yyyy hh:mm"
+                            // dateFormat="MMMM d, yyyy HH:mm"
+                            dateFormat="dd-MM-yyyy-HH:mm"
                         />
                         <Header content="Location Details" sub color="teal" />
                         <MyTextInput placeholder="City" name="city" />

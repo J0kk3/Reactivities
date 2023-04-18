@@ -39,3 +39,9 @@ cd into API then run this command:
 ```
 dotnet watch --no-hot-reload
 ```
+
+and cd into client-app then run this command:
+
+```
+npm start
+```

@@ -14,17 +14,17 @@ namespace Application.Activities
 
         public class Handler : IRequestHandler<Query, Result<List<ActivityDto>>>
         {
-            private readonly DataContext _context;
+            private readonly DataContext _ctx;
             private readonly IMapper _mapper;
-            public Handler(DataContext context, IMapper mapper)
+            public Handler(DataContext ctx, IMapper mapper)
             {
                 _mapper = mapper;
-                _context = context;
+                _ctx = ctx;
             }
 
             public async Task<Result<List<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activities = await _context.Activities
+                var activities = await _ctx.Activities
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken);
 

@@ -26,17 +26,17 @@ namespace Application.Activities
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
-            private readonly DataContext _context;
+            private readonly DataContext _ctx;
             private readonly IUserAccessor _userAccessor;
-            public Handler(DataContext context, IUserAccessor userAccessor)
+            public Handler(DataContext ctx, IUserAccessor userAccessor)
             {
                 _userAccessor = userAccessor;
-                _context = context;
+                _ctx = ctx;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var user = await _context.Users.FirstOrDefaultAsync(x =>
+                var user = await _ctx.Users.FirstOrDefaultAsync(x =>
                     x.UserName == _userAccessor.GetUsername());
 
                 var attendee = new ActivityAttendee
@@ -48,9 +48,9 @@ namespace Application.Activities
 
                 request.Activity.Attendees.Add(attendee);
 
-                _context.Activities.Add(request.Activity);
+                _ctx.Activities.Add(request.Activity);
 
-                var result = await _context.SaveChangesAsync() > 0;
+                var result = await _ctx.SaveChangesAsync() > 0;
 
                 if (!result) return Result<Unit>.Failure("Failed to create activity");
 

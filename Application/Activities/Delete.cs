@@ -14,22 +14,22 @@ namespace Application.Activities
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
-            private readonly DataContext _context;
+            private readonly DataContext _ctx;
 
-            public Handler(DataContext context)
+            public Handler(DataContext ctx)
             {
-                _context = context;
+                _ctx = ctx;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Id);
+                var activity = await _ctx.Activities.FindAsync(request.Id);
 
                 if (activity == null) return null;
 
-                _context.Remove(activity);
+                _ctx.Remove(activity);
 
-                var result = await _context.SaveChangesAsync() > 0;
+                var result = await _ctx.SaveChangesAsync() > 0;
 
                 if (!result) return Result<Unit>.Failure("Failed to delete the activity");
 

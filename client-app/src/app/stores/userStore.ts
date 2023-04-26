@@ -71,4 +71,9 @@ export default class UserStore
             console.log( err );
         }
     };
+
+    setImage = ( image: string ) =>
+    {
+        if ( this.user ) this.user.image = image;
+    };
 }

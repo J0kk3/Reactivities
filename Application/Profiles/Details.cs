@@ -5,35 +5,39 @@ using AutoMapper.QueryableExtensions;
 using Application.Core;
 using Persistence;
 using Microsoft.EntityFrameworkCore;
+using Application.Interfaces;
 
 namespace Application.Profiles
 {
     public class Details
     {
-        public class Query : IRequest<Result<Profile>>
+        public class Query : IRequest<Result<Profiles.Profile>>
         {
             public string Username { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<Profile>>
+        public class Handler : IRequestHandler<Query, Result<Profiles.Profile>>
         {
             private readonly DataContext _ctx;
             private readonly IMapper _mapper;
-            public Handler(DataContext ctx, IMapper mapper)
+            private readonly IUserAccessor _userAccessor;
+            public Handler(DataContext ctx, IMapper mapper, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _mapper = mapper;
                 _ctx = ctx;
             }
 
-            public async Task<Result<Profile>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<Profiles.Profile>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _ctx.Users
-                    .ProjectTo<Profile>(_mapper.ConfigurationProvider)
+                    .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider,
+                        new { currentUsername = _userAccessor.GetUsername() })
                     .SingleOrDefaultAsync(x => x.Username == request.Username);
 
                 if (user == null) return null;
 
-                return Result<Profile>.Success(user);
+                return Result<Profiles.Profile>.Success(user);
             }
         }
     }

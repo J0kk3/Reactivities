@@ -3,6 +3,8 @@ import { Image, Card, CardContent, Icon } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 //types
 import { Profile } from "../../app/models/profile";
+//components
+import FollowButton from "./FollowButton";
 
 interface Props
 {
@@ -20,9 +22,10 @@ const ProfileCard = ( { profile }: Props ) =>
             </Card.Content>
             <CardContent extra>
                 <Icon name="user">
-                    20 followers
+                    { profile.followersCount } followers
                 </Icon>
             </CardContent>
+            <FollowButton profile={ profile } />
         </Card>
     );
 };

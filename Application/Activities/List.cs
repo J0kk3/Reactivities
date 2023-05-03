@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using MediatR;
-using Application.Core;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 //project namespaces
+using Application.Core;
 using Persistence;
+using Application.Interfaces;
 
 namespace Application.Activities
 {
@@ -16,8 +17,10 @@ namespace Application.Activities
         {
             private readonly DataContext _ctx;
             private readonly IMapper _mapper;
-            public Handler(DataContext ctx, IMapper mapper)
+            private readonly IUserAccessor _userAccessor;
+            public Handler(DataContext ctx, IMapper mapper, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _mapper = mapper;
                 _ctx = ctx;
             }
@@ -25,7 +28,8 @@ namespace Application.Activities
             public async Task<Result<List<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var activities = await _ctx.Activities
-                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
+                        new { currentUsername = _userAccessor.GetUsername() })
                     .ToListAsync(cancellationToken);
 
                 return Result<List<ActivityDto>>.Success(activities);

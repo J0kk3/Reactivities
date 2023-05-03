@@ -5,7 +5,8 @@ import { Activity, ActivityFormValues } from "../models/activity";
 import { router } from "../router/Routes";
 import { store } from "../stores/store";
 import { User, UserFormValues } from "../models/user";
-import { Photo, Profile } from "../models/profile";
+import { Photo, Profile, UserActivity } from "../models/profile";
+import { PaginatedResult } from "../models/pagination";
 
 const sleep = ( delay: number ) =>
 {
@@ -15,7 +16,7 @@ const sleep = ( delay: number ) =>
     } );
 };
 
-axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = "http://localhost:5000/api";
 
 const responseBody = <T> ( response: AxiosResponse<T> ) => response.data;
 
@@ -29,6 +30,12 @@ axios.interceptors.request.use( config =>
 axios.interceptors.response.use( async response =>
 {
     await sleep( 1000 );
+    const pagination = response.headers[ "pagination" ];
+    if ( pagination )
+    {
+        response.data = new PaginatedResult( response.data, JSON.parse( pagination ) );
+        return response as AxiosResponse<PaginatedResult<any>>;
+    }
     return response;
 }, ( error: AxiosError ) =>
 {
@@ -36,9 +43,9 @@ axios.interceptors.response.use( async response =>
     switch ( status )
     {
         case 400:
-            if ( config.method === 'get' && data.errors.hasOwnProperty( 'id' ) )
+            if ( config.method === "get" && data.errors.hasOwnProperty( "id" ) )
             {
-                router.navigate( '/not-found' );
+                router.navigate( "/not-found" );
             }
             if ( data.errors )
             {
@@ -57,17 +64,17 @@ axios.interceptors.response.use( async response =>
             }
             break;
         case 401:
-            toast.error( 'unauthorised' );
+            toast.error( "unauthorised" );
             break;
         case 403:
-            toast.error( 'forbidden' );
+            toast.error( "forbidden" );
             break;
         case 404:
-            router.navigate( '/not-found' );
+            router.navigate( "/not-found" );
             break;
         case 500:
             store.commonStore.setServerError( data );
-            router.navigate( '/server-error' );
+            router.navigate( "/server-error" );
             break;
     }
     return Promise.reject( error );
@@ -81,7 +88,8 @@ const requests = {
 };
 
 const Activities = {
-    list: () => requests.get<Activity[]>( `/activities` ),
+    list: ( params: URLSearchParams ) => axios.get<PaginatedResult<Activity[]>>( `/activities`, { params } )
+        .then( responseBody ),
     details: ( id: string ) => requests.get<Activity>( `/activities/${ id }` ),
     create: ( activity: ActivityFormValues ) => requests.post<void>( `/activities`, activity ),
     update: ( activity: ActivityFormValues ) => requests.put<void>( `/activities/${ activity.id }`, activity ),
@@ -90,9 +98,9 @@ const Activities = {
 };
 
 const Account = {
-    current: () => requests.get<User>( 'account' ),
-    login: ( user: UserFormValues ) => requests.post<User>( '/account/login', user ),
-    register: ( user: UserFormValues ) => requests.post<User>( '/account/register', user )
+    current: () => requests.get<User>( "account" ),
+    login: ( user: UserFormValues ) => requests.post<User>( "/account/login", user ),
+    register: ( user: UserFormValues ) => requests.post<User>( "/account/register", user )
 };
 
 const Profiles = {
@@ -100,9 +108,9 @@ const Profiles = {
     uploadPhoto: ( file: any ) =>
     {
         let formData = new FormData();
-        formData.append( 'File', file );
-        return axios.post<Photo>( 'photos', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
+        formData.append( "File", file );
+        return axios.post<Photo>( "photos", formData, {
+            headers: { "Content-Type": "multipart/form-data" }
         } );
     },
     setMainPhoto: ( id: string ) => axios.post( `/photos/${ id }/setMain`, {} ),
@@ -110,7 +118,9 @@ const Profiles = {
     updateProfile: ( profile: Partial<Profile> ) => requests.put( `/profiles`, profile ),
     updateFollowing: ( username: string ) => requests.post( `/follow/${ username }`, {} ),
     listFollowings: ( username: string, predicate: string ) =>
-        requests.get<Profile[]>( `/follow/${ username }?predicate=${ predicate }` )
+        requests.get<Profile[]>( `/follow/${ username }?predicate=${ predicate }` ),
+    listActivities: ( username: string, predicate: string ) =>
+        requests.get<UserActivity[]>( `/profiles/${ username }/activities?predicate=${ predicate }` )
 };
 
 const agent = {

@@ -29,3 +29,11 @@ export interface Photo
     url: string;
     isMain: boolean;
 }
+
+export interface UserActivity
+{
+    id: string;
+    title: string;
+    category: string;
+    date: Date;
+}

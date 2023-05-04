@@ -11,14 +11,15 @@ namespace Infrastructure.Photos
     public class PhotoAccessor : IPhotoAccessor
     {
         private readonly Cloudinary _cloudinary;
+
         public PhotoAccessor(IOptions<CloudinarySettings> config)
         {
-            //exactly in this order
             var account = new Account(
                 config.Value.CloudName,
                 config.Value.ApiKey,
                 config.Value.ApiSecret
             );
+            _cloudinary = new Cloudinary(account);
         }
 
         public async Task<PhotoUploadResult> AddPhoto(IFormFile file)

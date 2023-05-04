@@ -7,7 +7,6 @@ import { useStore } from "../../../app/stores/store";
 import { PagingParams } from "../../../app/models/pagination";
 //components
 import ActivityList from "./ActivityList";
-import LoadingComponent from "../../../app/layout/LoadingComponent";
 import ActivityFilters from "./ActivityFilters";
 import InfiniteScroll from "react-infinite-scroller";
 import ActivityListItemPlaceholder from "./ActivityListItemPlaceholder";
